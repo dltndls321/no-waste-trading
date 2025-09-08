@@ -3,6 +3,7 @@
 Java Spring Boot 기반 메인 트레이딩 서버
 
 ## 📁 프로젝트 구조
+
 ```
 trading-backend/
 ├── src/
@@ -23,6 +24,7 @@ trading-backend/
 ```
 
 ## 🛠 기술 스택
+
 - Java 17
 - Spring Boot 3.x
 - Spring Data JPA
@@ -31,6 +33,7 @@ trading-backend/
 - OkHttp (HTTP 클라이언트)
 
 ## 📌 주요 기능
+
 - 한국투자증권 KIS API 연동
 - Claude AI 에이전트 관리
 - 거래 실행 및 모니터링
@@ -38,6 +41,7 @@ trading-backend/
 - Rate Limiting 처리
 
 ## 🚀 시작하기
+
 ```bash
 # 빌드
 mvn clean package
