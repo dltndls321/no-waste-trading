@@ -19,9 +19,9 @@ import jakarta.validation.Valid;
 @RequiredArgsConstructor
 @Tag(name = "Trading", description = "Trading operations API")
 public class TradingController {
-    
+
     private final TradingService tradingService;
-    
+
     @PostMapping("/analyze")
     @Operation(summary = "Analyze stock", description = "Analyze a stock using AI agents")
     public ResponseEntity<AnalysisResponse> analyzeStock(
@@ -30,7 +30,7 @@ public class TradingController {
         AnalysisResponse response = tradingService.analyzeStock(request);
         return ResponseEntity.ok(response);
     }
-    
+
     @PostMapping("/decision")
     @Operation(summary = "Get trading decision", description = "Get AI trading decision for a stock")
     public ResponseEntity<TradingDecision> getTradingDecision(
@@ -39,7 +39,7 @@ public class TradingController {
         TradingDecision decision = tradingService.getTradingDecision(symbol);
         return ResponseEntity.ok(decision);
     }
-    
+
     @PostMapping("/execute")
     @Operation(summary = "Execute trade", description = "Execute a trading decision")
     public ResponseEntity<String> executeTrade(
@@ -48,7 +48,7 @@ public class TradingController {
         String result = tradingService.executeTrade(decision);
         return ResponseEntity.ok(result);
     }
-    
+
     @GetMapping("/portfolio")
     @Operation(summary = "Get portfolio", description = "Get current portfolio status")
     public ResponseEntity<?> getPortfolio() {

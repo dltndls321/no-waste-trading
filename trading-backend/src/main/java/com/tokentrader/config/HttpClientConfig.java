@@ -9,12 +9,12 @@ import java.time.Duration;
 
 @Configuration
 public class HttpClientConfig {
-    
+
     @Bean
     public OkHttpClient okHttpClient() {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
-        
+
         return new OkHttpClient.Builder()
                 .connectTimeout(Duration.ofSeconds(30))
                 .readTimeout(Duration.ofSeconds(60))

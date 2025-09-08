@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "api")
 @Data
 public class ApiConfig {
-    
+
     private Kis kis = new Kis();
     private Claude claude = new Claude();
     private AiService aiService = new AiService();
-    
+
     @Data
     public static class Kis {
         private String appKey;
@@ -21,7 +21,7 @@ public class ApiConfig {
         private String accountNumber;
         private String accountProductCode;
     }
-    
+
     @Data
     public static class Claude {
         private String apiKey;
@@ -30,7 +30,7 @@ public class ApiConfig {
         private Integer maxTokens;
         private Double temperature;
     }
-    
+
     @Data
     public static class AiService {
         private String baseUrl;

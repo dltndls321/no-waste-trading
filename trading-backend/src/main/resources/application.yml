@@ -46,11 +46,11 @@ server:
 # API Keys Configuration
 api:
   kis:
-    app-key: ${KIS_APP_KEY}
-    secret-key: ${KIS_SECRET_KEY}
-    base-url: https://openapi.koreainvestment.com:9443
-    account-number: ${KIS_ACCOUNT_NUMBER}
-    account-product-code: ${KIS_ACCOUNT_PRODUCT_CODE}
+    app-key: ${KIS_MOCK_APP_KEY}
+    secret-key: ${KIS_MOCK_SECRET_KEY}
+    base-url: https://openapivts.koreainvestment.com:29443  # 모의투자 URL
+    account-number: ${KIS_MOCK_ACCOUNT_NUMBER}
+    account-product-code: ${KIS_MOCK_ACCOUNT_PRODUCT_CODE}
   
   claude:
     api-key: ${CLAUDE_API_KEY}
@@ -124,7 +124,7 @@ springdoc:
     operations-sorter: method
     tags-sorter: alpha
 
-# Development Profile
+# Development Profile (모의투자)
 ---
 spring:
   config:
@@ -135,7 +135,7 @@ spring:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
     username: sa
-    password: 
+    password:
   
   h2:
     console:
@@ -151,12 +151,20 @@ logging:
   level:
     com.tokentrader: TRACE
 
-# Production Profile
+# Production Profile (실거래)
 ---
 spring:
   config:
     activate:
       on-profile: prod
+
+api:
+  kis:
+    app-key: ${KIS_REAL_APP_KEY}
+    secret-key: ${KIS_REAL_SECRET_KEY}
+    base-url: https://openapi.koreainvestment.com:9443  # 실거래 URL
+    account-number: ${KIS_REAL_ACCOUNT_NUMBER}
+    account-product-code: ${KIS_REAL_ACCOUNT_PRODUCT_CODE}
   
   jpa:
     show-sql: false
@@ -167,3 +175,18 @@ logging:
   level:
     root: WARN
     com.tokentrader: INFO
+
+# Test Profile (테스트용 모의투자)
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+api:
+  kis:
+    app-key: ${KIS_MOCK_APP_KEY}
+    secret-key: ${KIS_MOCK_SECRET_KEY}
+    base-url: https://openapivts.koreainvestment.com:29443  # 모의투자 URL
+    account-number: ${KIS_MOCK_ACCOUNT_NUMBER}
+    account-product-code: ${KIS_MOCK_ACCOUNT_PRODUCT_CODE}
