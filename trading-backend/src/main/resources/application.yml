@@ -1,0 +1,169 @@
+spring:
+  application:
+    name: trading-backend
+  
+  # Database Configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tradingdb
+    username: ${DB_USERNAME:tradinguser}
+    password: ${DB_PASSWORD:tradingpass}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+  
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+  
+  # Redis Configuration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 60000ms
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 8
+          min-idle: 2
+
+# Server Configuration
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# API Keys Configuration
+api:
+  kis:
+    app-key: ${KIS_APP_KEY}
+    secret-key: ${KIS_SECRET_KEY}
+    base-url: https://openapi.koreainvestment.com:9443
+    account-number: ${KIS_ACCOUNT_NUMBER}
+    account-product-code: ${KIS_ACCOUNT_PRODUCT_CODE}
+  
+  claude:
+    api-key: ${CLAUDE_API_KEY}
+    base-url: https://api.anthropic.com/v1
+    model: claude-3-sonnet-20240229
+    max-tokens: 1000
+    temperature: 0.7
+  
+  ai-service:
+    base-url: ${AI_SERVICE_URL:http://localhost:8001}
+    timeout: 30000
+
+# Rate Limiting Configuration
+rate-limit:
+  kis:
+    calls-per-second: 15
+    burst-capacity: 20
+  claude:
+    calls-per-minute: 60
+    calls-per-day: 10000
+
+# Trading Configuration
+trading:
+  max-position-size: 100000
+  max-daily-loss: 50000
+  max-portfolio-size: 10
+  trading-hours:
+    start: "09:00"
+    end: "15:30"
+  
+  risk:
+    max-drawdown: 0.15
+    stop-loss-percentage: 0.05
+    take-profit-percentage: 0.10
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.tokentrader: DEBUG
+    org.springframework.web: INFO
+    org.hibernate: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+  file:
+    name: logs/trading-backend.log
+    max-size: 10MB
+    max-history: 30
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# OpenAPI Documentation
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui
+    operations-sorter: method
+    tags-sorter: alpha
+
+# Development Profile
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+logging:
+  level:
+    com.tokentrader: TRACE
+
+# Production Profile
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+
+logging:
+  level:
+    root: WARN
+    com.tokentrader: INFO
