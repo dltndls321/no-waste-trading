@@ -1,31 +1,29 @@
 # No Waste Trading 🤖💰
 
-> Claude Max 토큰을 활용한 AI 멀티 에이전트 자동매매 시스템
+> Claude Max 플랜과 Java를 결합한 하이브리드 AI 자동매매 시스템
 
 ## 🎯 프로젝트 소개
 
-비싼 Claude Max 구독의 남는 토큰이 아까우신가요?  
-주식 지식이 없어도 AI가 대신 분석하고 거래해드립니다!
+비싼 Claude Max 구독을 최대한 활용하여 API 비용 없이 고급 AI 분석을 제공하는 자동매매 시스템입니다!
 
 ### 핵심 특징
 - 💡 **토큰 활용**: Claude Max 플랜의 남는 토큰을 효율적으로 활용
-- 🤖 **멀티 에이전트**: 6개의 전문 AI 에이전트가 협업하여 투자 결정
-- 📊 **자동 분석**: 시장 분석부터 거래 실행까지 완전 자동화
-- 🛡️ **리스크 관리**: 전담 리스크 에이전트가 안전장치 역할
+- 🤖 **하이브리드 구조**: AI 판단은 Claude Code, 실행은 Java
+- 📊 **자동화 분석**: 스케줄러를 통한 일일/주간 자동 분석
+- 🛡️ **AI 리스크 관리**: Claude가 리스크 평가, Java가 실행
 
 ## 🏗️ 시스템 아키텍처
 
 ```
 ┌─────────────────────────────────────────────┐
-│            AI Agent Layer (Python)           │
-│  Research | Analysis | Portfolio | Risk     │
-│  Execution | Coordinator                    │
+│      Claude Code CLI (분석 레이어)           │
+│  시장 분석 | 종목 발굴 | 포트폴리오 분석    │
 ├─────────────────────────────────────────────┤
-│         Trading Backend (Java/Spring)        │
-│  API Gateway | Business Logic | Database    │
+│      Trading Backend (Java/Spring)           │
+│  실시간 거래 | 리스크 관리 | 데이터 처리    │
 ├─────────────────────────────────────────────┤
 │            External APIs                     │
-│  KIS API | Claude API | Market Data         │
+│  KIS API | Market Data | News API           │
 └─────────────────────────────────────────────┘
 ```
 
@@ -34,62 +32,73 @@
 ```
 no-waste-trading/
 ├── trading-backend/     # Java Spring Boot 메인 서버
-├── ai-agents/          # Python AI 에이전트 서비스
+├── claude-agents/       # Claude Code 자동화 스크립트
+│   ├── daily/          # 일일 분석 스크립트
+│   ├── weekly/         # 주간 분석 스크립트
+│   └── prompts/        # 에이전트별 프롬프트 템플릿
+├── data/               # 분석 결과 저장소
+│   ├── analysis/       # Claude 분석 결과
+│   ├── signals/        # 매매 신호
+│   └── reports/        # 일일/주간 리포트
+├── scheduler/          # 스케줄러 설정 (cron/task)
 ├── backtest-engine/    # 백테스팅 엔진
 ├── frontend/           # 웹 UI (React)
 ├── docs/               # 프로젝트 문서
-├── config/             # Docker, K8s 설정
-├── scripts/            # 자동화 스크립트
-├── data/               # 데이터 저장소
 └── monitoring/         # 모니터링 설정
 ```
 
 ## 🛠 기술 스택
 
-### Backend
+### Backend (실시간 처리)
 - **Java 17** / Spring Boot 3.x
 - **PostgreSQL** / Redis
 - **한국투자증권 KIS API**
 
-### AI/ML
-- **Python 3.10+**
-- **Claude API** (Anthropic)
-- **LangChain** / FastAPI
+### AI 분석 (배치 처리)
+- **Claude Code CLI** (Claude Max 플랜)
+- **Python 3.10+** (데이터 전처리)
+- **Windows Task Scheduler** / Cron
 
 ### Infrastructure
 - **Docker** / Docker Compose
 - **GitHub Actions** (CI/CD)
 - **Grafana** / Prometheus (모니터링)
 
-## 🤖 AI 에이전트 소개
+## 🤖 하이브리드 에이전트 시스템
 
-| 에이전트 | 역할 | 주요 기능 |
-|---------|------|-----------|
-| Research Agent | 종목 발굴 | 시장 트렌드 분석, 종목 스크리닝 |
-| Analysis Agent | 심층 분석 | 기술적/재무적 분석, 밸류에이션 |
-| Portfolio Agent | 포트폴리오 관리 | 자산 배분, 리밸런싱 |
-| Risk Agent | 리스크 관리 | 위험 평가, 손절선 설정 |
-| Execution Agent | 거래 실행 | 주문 타이밍, 슬리피지 최소화 |
-| Coordinator Agent | 전체 조율 | 에이전트 간 의견 조율, 최종 결정 |
+| 에이전트 | 구현 방식 | 실행 주기 | 역할 |
+|---------|-----------|-----------|------|
+| Research Agent | Claude Code | 일 1회 (06:00) | 시장 동향, 뉴스 분석 |
+| Analysis Agent | Claude Code | 일 2회 (06:30, 22:30) | 기술적/재무적 분석 |
+| Portfolio Agent | Claude Code | 주 1회 (일요일) | 포트폴리오 리밸런싱 |
+| Risk Agent | Claude Code | 수시 (신호 발생시) | 리스크 평가 및 판단 |
+| Execution Module | Java | 실시간 | 주문 실행, 체결 관리 |
+| Monitor Module | Java | 실시간 | 가격 추적, 조건 감시 |
 
 ## 🚀 시작하기
 
 ### 사전 요구사항
 - Java 17+ (Spring Boot 3.x)
 - Maven 3.6+
-- Python 3.10+ (AI 에이전트용)
+- Claude Code CLI 설치
+- Python 3.10+ (선택사항)
 - Redis (선택사항)
 - PostgreSQL (운영환경용)
+
+### Claude Code CLI 설치
+```bash
+# Windows (PowerShell)
+iwr https://storage.googleapis.com/claude-code-cli/install.ps1 -useb | iex
+
+# 로그인
+claude login
+```
 
 ### API 키 발급
 1. **한국투자증권 KIS API**
    - [KIS Developers](https://apiportal.koreainvestment.com/) 가입
    - 모의투자 계좌 신청
    - 앱 등록 및 API 키 발급
-
-2. **Claude API**
-   - [Anthropic Console](https://console.anthropic.com/) 가입
-   - API 키 발급
 
 ### 설치 및 실행
 
@@ -102,101 +111,50 @@ cd no-waste-trading
 2. **환경 변수 설정**
 ```bash
 cp .env.example .env
-# .env 파일 편집하여 API 키 입력
+# .env 파일 편집하여 KIS API 키 입력
+# Claude API 키는 불필요 (Claude Code CLI 사용)
 ```
 
 3. **백엔드 서버 실행**
 ```bash
 cd trading-backend
-
-# Maven 설정 (nexus 저장소 우회)
-mvn -s settings-override.xml clean compile
-
-# 개발 모드 실행 (모의투자)
 mvn -s settings-override.xml spring-boot:run
-
-# 또는 IntelliJ IDEA에서 실행
-# TradingBackendApplication.java 실행
 ```
 
-4. **API 문서 확인**
-```
-http://localhost:8080/swagger-ui  # API 문서
-http://localhost:8080/h2-console   # H2 DB 콘솔 (dev 모드)
-http://localhost:8080/actuator/health  # 헬스체크
-```
-
-### 프로파일별 실행
-
+4. **자동화 스크립트 설정**
 ```bash
-# 개발 환경 (모의투자, H2 DB)
-mvn -s settings-override.xml spring-boot:run -Dspring.profiles.active=dev
+# Windows Task Scheduler 설정
+cd scheduler
+./setup-windows-scheduler.bat
 
-# 운영 환경 (실거래, PostgreSQL)
-mvn -s settings-override.xml spring-boot:run -Dspring.profiles.active=prod
-
-# 테스트 환경
-mvn -s settings-override.xml spring-boot:run -Dspring.profiles.active=test
+# 또는 수동 실행
+cd claude-agents/daily
+./run-morning-analysis.bat
 ```
 
-### 환경 변수 구조
+## 📅 일일 자동화 스케줄
 
-```bash
-# .env 파일 예시
-# 모의투자용 (dev/test 프로파일)
-KIS_MOCK_APP_KEY=your_mock_app_key
-KIS_MOCK_SECRET_KEY=your_mock_secret_key
-KIS_MOCK_ACCOUNT_NUMBER=12345678
-KIS_MOCK_ACCOUNT_PRODUCT_CODE=01
-
-# 실거래용 (prod 프로파일)
-KIS_REAL_APP_KEY=your_real_app_key
-KIS_REAL_SECRET_KEY=your_real_secret_key
-KIS_REAL_ACCOUNT_NUMBER=87654321
-KIS_REAL_ACCOUNT_PRODUCT_CODE=01
-
-# Claude API (공통)
-CLAUDE_API_KEY=your_claude_api_key
-
-# 프로파일 설정
-SPRING_PROFILES_ACTIVE=dev
 ```
+06:00 - 시장 분석 (Claude Code)
+  └─> data/analysis/daily_research.json
 
-## 📈 개발 로드맵
+06:30 - 매매 신호 생성 (Claude Code)
+  └─> data/signals/trading_signals.json
 
-### Phase 1: 기반 구축 ✅
-- [x] 프로젝트 구조 설계
-- [x] Spring Boot 백엔드 구축
-- [x] 환경별 설정 분리 (dev/prod/test)
-- [x] KIS API / Claude API 서비스 구현
-- [x] Rate Limiting 설정
+07:00-22:00 - 실시간 거래 (Java)
+  ├─> 신호 기반 자동 매매
+  ├─> 리스크 모니터링
+  └─> 주문 체결 관리
 
-### Phase 2: API 연동 🚧
-- [ ] KIS API 키 발급 및 테스트
-- [ ] Claude API 키 발급 및 테스트
-- [ ] 시세 조회 API 연동
-- [ ] 주문 API 연동
+22:30 - 종가 분석 (Claude Code)
+  └─> data/analysis/closing_analysis.json
 
-### Phase 3: AI 에이전트
-- [ ] Python AI 에이전트 서비스 구축
-- [ ] Research Agent 구현
-- [ ] Analysis Agent 구현
-- [ ] Portfolio Agent 구현
-- [ ] Risk Agent 구현
-- [ ] Execution Agent 구현
-- [ ] Coordinator Agent 구현
+23:00 - 일일 리포트 (Claude Code)
+  └─> data/reports/daily_report.json
 
-### Phase 4: 백테스팅 & 검증
-- [ ] 백테스팅 엔진 개발
-- [ ] 과거 데이터 수집
-- [ ] 전략 백테스팅
-- [ ] 모의투자 테스트
-
-### Phase 5: 프로덕션
-- [ ] 웹 UI 개발
-- [ ] 모니터링 시스템 구축
-- [ ] 실거래 연동
-- [ ] 운영 자동화
+일요일 22:00 - 주간 포트폴리오 리밸런싱 (Claude Code)
+  └─> data/analysis/weekly_rebalance.json
+```
 
 ## 📊 성과 목표
 
@@ -204,44 +162,56 @@ SPRING_PROFILES_ACTIVE=dev
 - 연환산 수익률 > 15%
 - 최대 낙폭 < 15%
 - 월 평균 거래 횟수: 20-30회
+- **추가 API 비용: $0** (Claude Max 플랜 토큰 활용)
 
-## 🔍 주요 기능
+## 📈 개발 로드맵
 
-### 현재 구현된 기능
-- ✅ Spring Boot 백엔드 서버
-- ✅ KIS API 연동 서비스 (시세조회, 주문)
-- ✅ Claude API 연동 서비스
-- ✅ Rate Limiting (초당 15회)
-- ✅ 환경별 설정 분리
-- ✅ Swagger API 문서
-- ✅ H2 인메모리 DB (개발용)
+### Phase 1: 기반 구축 ✅
+- [x] 프로젝트 구조 설계
+- [x] Spring Boot 백엔드 구축
+- [x] 환경별 설정 분리
+- [x] 하이브리드 아키텍처 재설계
+- [x] KIS API 키 발급 및 설정
 
-### 개발 예정 기능
-- 🚧 AI 에이전트 시스템
-- 🚧 백테스팅 엔진
-- 🚧 실시간 시세 모니터링
-- 🚧 포트폴리오 대시보드
-- 🚧 알림 시스템
+### Phase 2: Claude Code 통합 🚧
+- [ ] Claude Code 자동화 스크립트 작성
+- [ ] 프롬프트 템플릿 최적화
+- [ ] 스케줄러 설정
+- [ ] JSON 파싱 및 검증
+- [ ] Spring Boot 서버 첫 실행 테스트
 
-## 🐛 트러블슈팅
+### Phase 3: 실시간 처리
+- [ ] Java 파일 모니터링 시스템
+- [ ] 실시간 주문 실행 시스템
+- [ ] Java 리스크 관리 모듈
+- [ ] 알림 시스템
 
-### Maven nexus 저장소 문제
-```bash
-# settings-override.xml 사용하여 Maven Central 저장소 사용
-mvn -s settings-override.xml clean compile
-```
+### Phase 4: 백테스팅 & 검증
+- [ ] Claude Code 기반 백테스팅
+- [ ] 과거 데이터 분석
+- [ ] 모의투자 테스트
 
-### Java 버전 문제
-```bash
-# Java 17 설치 필요
-java -version  # 17 이상 확인
-```
+### Phase 5: 운영 자동화
+- [ ] 웹 대시보드
+- [ ] 성과 모니터링
+- [ ] 자동 리포트 생성
 
-### 포트 충돌
-```yaml
-# application.yml에서 포트 변경
-server:
-  port: 8081
+## 🔧 Claude Code 스크립트 예시
+
+```batch
+# claude-agents/daily/morning-analysis.bat
+@echo off
+set TODAY=%date:~0,10%
+
+echo Running morning market analysis...
+claude "오늘 %TODAY% 미국 시장 분석: 
+1. 주요 뉴스와 이벤트 정리
+2. 섹터별 동향 분석  
+3. 관심 종목 10개 추천
+4. 각 종목별 매수/매도 신호
+결과를 JSON 형식으로 작성해줘" > ..\..\data\analysis\daily_research_%TODAY%.json
+
+echo Analysis complete!
 ```
 
 ## 🤝 기여하기
