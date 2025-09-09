@@ -173,25 +173,31 @@ cd claude-agents/daily
 - [x] 하이브리드 아키텍처 재설계
 - [x] KIS API 키 발급 및 설정
 
-### Phase 2: Claude Code 통합 🚧
+### Phase 2: Spring Boot 서버 연동 ✅
+- [x] 환경변수 설정 문제 해결
+- [x] application.yml 하이브리드 구조 수정
+- [x] Spring Boot 서버 정상 기동
+- [x] KIS API 기본 호출 구조 완료
+- [ ] KIS API OAuth 토큰 인증 완성
+
+### Phase 3: Claude Code 통합 🚧  
 - [ ] Claude Code 자동화 스크립트 작성
 - [ ] 프롬프트 템플릿 최적화
 - [ ] 스케줄러 설정
 - [ ] JSON 파싱 및 검증
-- [ ] Spring Boot 서버 첫 실행 테스트
 
-### Phase 3: 실시간 처리
+### Phase 4: 실시간 처리
 - [ ] Java 파일 모니터링 시스템
 - [ ] 실시간 주문 실행 시스템
 - [ ] Java 리스크 관리 모듈
 - [ ] 알림 시스템
 
-### Phase 4: 백테스팅 & 검증
+### Phase 5: 백테스팅 & 검증
 - [ ] Claude Code 기반 백테스팅
 - [ ] 과거 데이터 분석
 - [ ] 모의투자 테스트
 
-### Phase 5: 운영 자동화
+### Phase 6: 운영 자동화
 - [ ] 웹 대시보드
 - [ ] 성과 모니터링
 - [ ] 자동 리포트 생성

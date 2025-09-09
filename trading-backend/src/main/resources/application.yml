@@ -23,7 +23,7 @@ spring:
         format_sql: true
     show-sql: false
   
-  # Redis Configuration
+  # Redis Configuration (선택사항 - Claude Code와 통신용)
   data:
     redis:
       host: ${REDIS_HOST:localhost}
@@ -43,34 +43,29 @@ server:
     include-message: always
     include-binding-errors: always
 
-# API Keys Configuration
+# API Keys Configuration (기본값: 모의투자)
 api:
   kis:
-    app-key: ${KIS_MOCK_APP_KEY}
-    secret-key: ${KIS_MOCK_SECRET_KEY}
+    app-key: PSSnf5wc2GTe5sOBOHt2PJwVppcNPgBwpEhO
+    secret-key: 8JPIwpYdZHFVDt00VaZTu3MoLqHCO08bD9eJY4HAhAEqLs84JQoKQVeMBNamBJmPJYk9IMNggq7k3NcMjL28ZAZ99zhby1CDzLQvIK9pHjt+wygTmRUd0VhtRnEO7o+9T/M7MnifSfMiCUvLR9/1oi342pGfUOjipE8vhOxm4XDkhq2kvXQ=
     base-url: https://openapivts.koreainvestment.com:29443  # 모의투자 URL
-    account-number: ${KIS_MOCK_ACCOUNT_NUMBER}
-    account-product-code: ${KIS_MOCK_ACCOUNT_PRODUCT_CODE}
+    account-number: 50153145
+    account-product-code: "01"
   
-  claude:
-    api-key: ${CLAUDE_API_KEY}
-    base-url: https://api.anthropic.com/v1
-    model: claude-3-sonnet-20240229
-    max-tokens: 1000
-    temperature: 0.7
+  # Claude API 설정 제거 (Claude Code CLI 사용)
+  # claude:
+  #   api-key: not_needed
+  #   base-url: not_needed
   
-  ai-service:
-    base-url: ${AI_SERVICE_URL:http://localhost:8001}
-    timeout: 30000
+  # AI Service 설정 제거 (Claude Code CLI 직접 사용)
+  # ai-service:
+  #   base-url: not_needed
 
-# Rate Limiting Configuration
+# Rate Limiting Configuration (KIS API만)
 rate-limit:
   kis:
     calls-per-second: 15
     burst-capacity: 20
-  claude:
-    calls-per-minute: 60
-    calls-per-day: 10000
 
 # Trading Configuration
 trading:
@@ -86,11 +81,20 @@ trading:
     stop-loss-percentage: 0.05
     take-profit-percentage: 0.10
 
+# File Monitoring for Claude Code results
+file-monitor:
+  data-directory: ${user.dir}/../data
+  analysis-directory: ${user.dir}/../data/analysis
+  signals-directory: ${user.dir}/../data/signals
+  reports-directory: ${user.dir}/../data/reports
+  poll-interval: 5000  # 5초마다 파일 변경 확인
+
 # Logging Configuration
 logging:
   level:
     root: INFO
     com.tokentrader: DEBUG
+    com.tokentrader.api.kis: INFO
     org.springframework.web: INFO
     org.hibernate: WARN
   pattern:
@@ -124,7 +128,7 @@ springdoc:
     operations-sorter: method
     tags-sorter: alpha
 
-# Development Profile (모의투자)
+# Development Profile (H2 DB, 모의투자)
 ---
 spring:
   config:
@@ -149,14 +153,19 @@ spring:
 
 logging:
   level:
-    com.tokentrader: TRACE
+    com.tokentrader: DEBUG
+    com.tokentrader.api.kis: INFO
 
-# Production Profile (실거래)
+# Production Profile (PostgreSQL, 실거래)
 ---
 spring:
   config:
     activate:
       on-profile: prod
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
 
 api:
   kis:
@@ -164,24 +173,28 @@ api:
     secret-key: ${KIS_REAL_SECRET_KEY}
     base-url: https://openapi.koreainvestment.com:9443  # 실거래 URL
     account-number: ${KIS_REAL_ACCOUNT_NUMBER}
-    account-product-code: ${KIS_REAL_ACCOUNT_PRODUCT_CODE}
-  
-  jpa:
-    show-sql: false
-    hibernate:
-      ddl-auto: validate
+    account-product-code: "01"
 
 logging:
   level:
     root: WARN
     com.tokentrader: INFO
 
-# Test Profile (테스트용 모의투자)
+# Test Profile (H2 DB, 모의투자)
 ---
 spring:
   config:
     activate:
       on-profile: test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
 
 api:
   kis:
@@ -189,4 +202,4 @@ api:
     secret-key: ${KIS_MOCK_SECRET_KEY}
     base-url: https://openapivts.koreainvestment.com:29443  # 모의투자 URL
     account-number: ${KIS_MOCK_ACCOUNT_NUMBER}
-    account-product-code: ${KIS_MOCK_ACCOUNT_PRODUCT_CODE}
+    account-product-code: "01"
