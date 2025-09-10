@@ -220,9 +220,6 @@ claude "오늘 %TODAY% 미국 시장 분석:
 echo Analysis complete!
 ```
 
-## 🤝 기여하기
-
-이슈와 PR은 언제나 환영합니다!
 
 ## 📄 라이선스
 
